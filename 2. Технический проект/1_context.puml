@@ -1,25 +1,21 @@
-@startuml Диаграмма контекста
-title "C4. Контекст"
+@startuml C4. Контекст
 
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
-!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
-!include $ICONURL/common.puml
-!include $ICONURL/devicons/react.puml
-!include $ICONURL/devicons/php.puml
-!include $ICONURL/devicons2/sqlite.puml
+title C4. Контекст: Система семейного бюджета
 
+!include <C4/C4_Container>
 
-
-Person(reader, "Читатель", "Просматр каталога и поиск в нем книг, бронирование книги")
-Person(librarin, "Библиотекарь", "Учет новых поступлений книг, выдача книг читателям, прием возвращенных книг, учет штрафов за просроченный возврат")
-Person(admin, "Администратор", "Управление учетными записями пользователей, настройка системы, анализ данных о посещениях и выданных книгах.")
-
-System(libAcc, "Система учета библиотеки")
-Rel(reader, libAcc, "")
-Rel(librarin, libAcc, "")
-Rel(admin, libAcc, "")
-
-System_Ext(email, "Email сервис", "отправка уведомлений")
-Rel(libAcc, email, "")
+Person(family_member, "Член семьи", "Учет личных доходов и расходов, просмотр общего бюджета.")
+Person(head_of_family, "Глава семьи", "Планирование общего бюджета, контроль расходов, создание сберегательных целей.")
+Person(child, "Ребенок", "Внесение заработанных денег, отслеживание расходов и целей.")
+System(budget_system, "Система семейного бюджета", "Приложение для учета финансов, планирования бюджета, отслеживания доходов и расходов.")
+Rel(family_member, budget_system, "Использует для учета доходов и расходов")
+Rel(head_of_family, budget_system, "Управляет общим бюджетом, устанавливает сберегательные цели")
+Rel(child, budget_system, "Следит за своими расходами и финансами")
+System_Ext(bank_system, "Банковская система", "Интеграция с банковскими счетами и транзакциями для учета доходов и расходов.")
+System_Ext(finance_app, "Другие финансовые приложения", "Импорт данных о расходах и доходах из других приложений.")
+System_Ext(email_service, "Email сервис", "Отправка уведомлений и отчётов пользователям.")
+Rel(budget_system, bank_system, "Интеграция с банковскими системами")
+Rel(budget_system, finance_app, "Импорт данных из финансовых приложений")
+Rel(budget_system, email_service, "Передача информации пользователям на почту")
 
 @enduml

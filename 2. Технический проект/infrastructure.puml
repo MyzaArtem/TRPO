@@ -1,43 +1,69 @@
-@startuml Система учета библиотеки. Диаграмма infrastructure
-' C4
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+@startuml C4 Infrastructure Diagram - Система семейного бюджета
+left to right direction
+ 
+!include <C4/C4_Container>
 
-'
-title "Система учета библиотеки. Диаграмма инфраструктуры"
+title C4 Infrastructure Diagram - Система семейного бюджета
 
-'
-Person(user, "Пользователь")
+package "Облачная инфраструктура" as cloud {
+    Container(nginx, "Nginx", "Nginx", "Обратный прокси и балансировщик нагрузки")
 
-package "Основной сервер" { 
-    Container(zabbixAgent, "Мониторинг", "Zabbix-агент", "")  
-
-    package "Doker-compose" { 
-        package "Doker-контейнер front" {  
-            Container(spaFront, "Front spa", "React", "")  
+    package "Kubernetes Cluster" as k8s_cluster {
+        package "Auth Pod" as auth_pod {
+            Container(auth_service, "Auth Service", "Node.js, Express", "Сервис авторизации и аутентификации")
         }
 
-        package "Doker-контейнер back" { 
-            Container(back, "api aplication ", "php", "")
-            Container(db, "Database", "SQLite")
+        package "User Pod" as user_pod {
+            Container(user_service, "User Service", "Node.js, Express", "Сервис управления пользователями")
+        }
+
+        package "Goals Pod" as goals_pod {
+            Container(goals_service, "Goals Service", "Node.js, Express", "Сервис управления сберегательными целями")
+        }
+
+        package "Notification Pod" as notification_pod {
+            Container(notification_service, "Notification Service", "Node.js, Express", "Сервис уведомлений")
+        }
+
+        package "Reports Pod" as reports_pod {
+            Container(reports_service, "Reports Service", "Node.js, Express", "Сервис отчетов и аналитики")
+        }
+
+        package "Budget Pod" as budget_pod {
+            Container(budget_service, "Budget Service", "Node.js, Express", "Сервис управления бюджетом")
         }
     }
+
+    Container(rabbitmq, "Шина событий", "RabbitMQ", "Обмен сообщениями между сервисами")
 }
 
-package "Вспомогательный сервер" { 
-    Container(zabbixServ, "Мониторинг", "Zabbix-сервер", "")  
-    Container(backup, "Backup service", "Backup service", "")  
+package "Database Cluster" as database {
+    Container(database_master, "PostgreSQL Master", "PostgreSQL", "Основная база данных")
+    Container(database_replica, "PostgreSQL Replica", "PostgreSQL", "Реплика базы данных для чтения")
 }
 
+System_Ext(bank_system, "Банковская система", "API для синхронизации данных о транзакции")
+System_Ext(finance_app, "Платёжная система", "API для обработки транзакций")
+System_Ext(email_service, "Email сервис", "Mailgun API")
 
-'ref
-user --> spaFront : "HTTPS"
-spaFront --> back : "HTTPS/REST"
-back -right-> db : "System calls"
+' Соединения между сервисами
+Rel(k8s_cluster, database, "Чтение/Запись данных", "SQL")
+Rel_D(database_master, database_replica, "Репликация данных", "Streaming")
 
-zabbixAgent -> spaFront : "TCP/IP"
-zabbixAgent -> back : "TCP/IP"
+' Взаимодействие с внешними системами
+Rel(budget_service, bank_system, "Получение данных о транзакциях", "REST API")
+Rel(notification_service, email_service, "Отправка уведомлений", "REST API")
+Rel(goals_service, finance_app, "Импорт данных из финансовых приложений", "REST API")
 
-backup -up-> db : TCP/IP
-zabbixServ -up-> zabbixAgent : TCP/IP
+' Взаимодействие RabbitMQ
+Rel(auth_service, rabbitmq, "Публикация событий аутентификации", "AMQP")
+Rel(user_service, rabbitmq, "Публикация событий управления пользователями", "AMQP")
+Rel(goals_service, rabbitmq, "Публикация событий целей", "AMQP")
+Rel(notification_service, rabbitmq, "Чтение и публикация событий уведомлений", "AMQP")
+Rel(reports_service, rabbitmq, "Публикация событий отчетов", "AMQP")
+Rel(budget_service, rabbitmq, "Публикация событий бюджета", "AMQP")
+
+' Балансировка нагрузки
+Rel(nginx, k8s_cluster, "Проксирование запросов", "HTTP")
 
 @enduml

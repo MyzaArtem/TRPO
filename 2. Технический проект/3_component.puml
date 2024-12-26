@@ -1,130 +1,90 @@
-@startuml API. Диаграмма компонентов
-title "C4. Компоненты"
+@startuml C4. Компонент
 
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
-!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
-!include $ICONURL/common.puml
-!include $ICONURL/devicons/react.puml
-!include $ICONURL/devicons/php.puml
-!include $ICONURL/devicons2/sqlite.puml
+title C4. Компоненты: Система семейного бюджета
 
-Component(front, "Веб интерфэйс", "SPA на ReactJS", $sprite="react")
+!include <C4/C4_Container>
 
-System_Boundary(libAcc, "API") {
+System_Boundary(budgetSystem_Boundary, "API Сервиса семейного бюджета") {
+    
+    ' Контроллеры
+    Container_Boundary(controllers, "Контроллеры") {
+        Container(authController, "AuthController", "Node.js, Express", "Обработка запросов на авторизацию и аутентификацию пользователей")
+        Container(financialController, "FinancialController", "Node.js, Express", "Обработка запросов на управление доходами, расходами и целями")
+        Container(reportingController, "ReportingController", "Node.js, Express", "Обработка запросов на генерацию отчетов и анализа данных")
+        Container(integrationController, "IntegrationController", "Node.js, Express", "Обработка запросов на интеграцию с внешними финансовыми сервисами")
+    }
 
-  Component(RegisterController, "RegisterController", "PHP", "Регистрация в системе")
-  Rel(front,RegisterController, "")
-  Component(RegisterService, "RegisterService", "PHP")
-  Rel(RegisterController,RegisterService, "")
-  Component(UserRepository, "UserRepository", "PHP")
-  Rel(RegisterService,UserRepository, "")
-  Component(ReaderRepository, "ReaderRepository", "PHP")
-  Rel(RegisterService,ReaderRepository, "")
+    ' Сервисы
+    Container_Boundary(services, "Сервисы") {
+        Container(authService, "AuthService", "Node.js, Express", "Бизнес-логика для аутентификации пользователей")
+        Container(financialService, "FinancialService", "Node.js, Express", "Обработка операций с доходами, расходами и сбережениями")
+        Container(reportingService, "ReportingService", "Node.js, Express", "Генерация отчетов, графиков и анализа")
+        Container(integrationService, "IntegrationService", "Node.js, Express", "Интеграция с внешними финансовыми сервисами")
+    }
 
+    ' Репозитории
+    Container_Boundary(repositories, "Репозитории") {
+        Container(userRepositoryInterface, "IUserRepository", "Интерфейс", "Абстракция доступа к данным о пользователях")
+        Container(financialRepositoryInterface, "IFinancialRepository", "Интерфейс", "Абстракция доступа к данным о финансовых операциях")
+        Container(reportRepositoryInterface, "IReportRepository", "Интерфейс", "Абстракция доступа к данным о отчетах")
 
-  Component(AuthController, "AuthController", "PHP", "Авторизация в системе")
-  Rel(front,AuthController, "")
-  Component(AuthService, "AuthService", "PHP")
-  Rel(AuthController,AuthService, "")
-  Rel(AuthService,UserRepository, "")
-  Component(UserActivityRepository, "UserActivityRepository", "PHP")
-  Rel(AuthService,UserActivityRepository, "")
+        Container(userRepository, "UserRepository", "Node.js, Express", "Реализация репозитория пользователей")
+        Container(financialRepository, "FinancialRepository", "Node.js, Express", "Реализация репозитория финансовых данных")
+        Container(reportRepository, "ReportRepository", "Node.js, Express", "Реализация репозитория отчетов")
+    }
 
+    ' Сущности
+    Container_Boundary(entities, "Сущности") {
+        Container(userEntity, "UserEntity", "Класс данных", "Хранение данных о пользователях")
+        Container(financialEntity, "FinancialEntity", "Класс данных", "Хранение данных о финансовых операциях")
+        Container(reportEntity, "ReportEntity", "Класс данных", "Хранение данных об отчетах")
+    }
 
-  Component(ConfirmEmailController, "ConfirmEmailController", "PHP", "Подтверждение email")
-  Rel(front,ConfirmEmailController, "")
-  Component(ConfirmEmailService, "ConfirmEmailService", "PHP")
-  Rel(ConfirmEmailController,ConfirmEmailService, "")
-  Rel(ConfirmEmailService,UserRepository, "")
-
-
-  Component(BookingController, "BookingController", "PHP", "Бронирование книг")
-  Rel(front,BookingController, "")
-  Component(BookingService, "BookingService", "PHP")
-  Rel(BookingController,BookingService, "")
-  Component(BookRepository, "BookRepository", "PHP")
-  Rel(BookingService,BookRepository, "")
-  Component(BookingRepository, "BookingRepository", "PHP")
-  Rel(BookingService,BookingRepository, "")
-
-
-  Component(ReaderInfoController, "ReaderInfoController", "PHP", "Информация о читателях")
-  Rel(front,ReaderInfoController, "")
-  Component(ReaderInfoService, "ReaderInfoService", "PHP")
-  Rel(ReaderInfoController,ReaderInfoService, "")
-  Rel(ReaderInfoService,UserActivityRepository, "")
-
-
-  Component(ReaderIDController, "ReaderIDController", "PHP", "Идентификация и подтверждение личности")
-  Rel(front,ReaderIDController, "")
-  Component(ReaderIDService, "ReaderIDService", "PHP")
-  Rel(ReaderIDController,ReaderIDService, "")
-  Rel(ReaderIDService,UserActivityRepository, "")
-  Rel(ReaderIDService,ReaderRepository, "")
-
-
-
-  Component(LeaseController, "LeaseController", "PHP", "Выдача и возврат книг, выписка штрафов")
-  Rel(front,LeaseController, "")
-  Component(LeaseService, "LeaseService", "PHP")
-  Rel(LeaseController,LeaseService, "")
-  Component(LeaseRepository, "LeaseRepository", "PHP")
-  Rel(LeaseService,LeaseRepository, "")
-  Component(FineRepository, "FineRepository", "PHP")
-  Rel(LeaseService,FineRepository, "")
-  Rel(LeaseService,BookingRepository, "")
-  Component(SettingsRepository, "SettingsRepository", "PHP")
-  Rel(LeaseService,SettingsRepository, "")
-  
-
-  Component(FineController, "FineController", "PHP", "Просмотр и погашение штрафов")
-  Rel(front,FineController, "")
-  Component(FineService, "FineService", "PHP")
-  Rel(FineController,FineService, "")
-  Rel(FineService,FineRepository, "")
-
-
-  Component(UserController, "UserController", "PHP", "Управление пользователями")
-  Rel(front,UserController, "")
-  Component(UserService, "UserService", "PHP")
-  Rel(UserController,UserService, "")
-  Rel(UserService,UserRepository, "")
-
-
-  Component(SettingsController, "SettingsController", "PHP", "Управление настроками системы")
-  Rel(front,SettingsController, "")
-  Component(SettingsService, "SettingsService", "PHP")
-  Rel(SettingsController,SettingsService, "")  
-  Rel(SettingsService,SettingsRepository, "")
-
-
-  Component(StatisticsController, "StatisticsController", "PHP", "Получение статистики")
-  Rel(front,StatisticsController, "")
-  Component(StatisticsService, "StatisticsService", "PHP")
-  Rel(StatisticsController,StatisticsService, "")
-  Rel(StatisticsService,UserActivityRepository, "")
-  Rel(StatisticsService,LeaseRepository, "")
-
-
-  Component(NotificationController, "NotificationController", "PHP", "Утправка уведомлений")
-  Component(NotificationService, "StatisticsService", "PHP")
-  Rel(NotificationController,NotificationService, "")
-  Rel(NotificationService,LeaseRepository, "")
-  Rel(NotificationService,SettingsRepository, "")
+    ' API шлюз
+    Container(api_gateway, "API шлюз", "Nginx", "Управление маршрутизацией запросов к различным сервисам")
 }
 
-Component_Ext(DBMS, "DBMS", "SQLite")
-Rel(UserRepository, DBMS, "")
-Rel(ReaderRepository, DBMS, "")
-Rel(UserActivityRepository, DBMS, "")
-Rel(BookRepository, DBMS, "")
-Rel(BookingRepository, DBMS, "")
-Rel(LeaseRepository, DBMS, "")
-Rel(FineRepository, DBMS, "")
-Rel(SettingsRepository, DBMS, "")
+System_Ext(bankSystem, "Банковская система", "Интеграция с банковскими счетами и транзакциями для учета доходов и расходов")
+System_Ext(financeApp, "Финансовые приложения", "Импорт данных из других приложений")
+System_Ext(emailService, "Email Сервис", "Отправка уведомлений и отчетов пользователям")
+Container(rabbitmq, "RabbitMQ", "Шина сообщений", "Обмен событиями между компонентами системы")
 
-System_Ext(email, "Email сервис", "отправка уведомлений")
-Rel(RegisterService, email, "Отправка email для подтверждения", "SMTP + TLS")
-Rel(NotificationService, email, "Отправка уведомлений", "SMTP + TLS")
+Container(clientA, "Клиент A", "Использует UserEntity", "Связан с сущностями пользователей")
+Container(clientB, "Клиент B", "Использует FinancialEntity", "Связан с финансовыми сущностями")
+Container(clientC, "Клиент C", "Использует ReportEntity", "Связан с отчетными сущностями")
+
+Rel(authController, authService, "Вызов бизнес-логики аутентификации", "HTTP")
+Rel(financialController, financialService, "Вызов бизнес-логики финансов", "HTTP")
+Rel(reportingController, reportingService, "Вызов бизнес-логики отчетности", "HTTP")
+Rel(integrationController, integrationService, "Вызов бизнес-логики интеграции", "HTTP")
+
+Rel_U(authService, userRepositoryInterface, "Реализация интерфейса", "Dependency Injection")
+Rel_U(financialService, financialRepositoryInterface, "Реализация интерфейса", "Dependency Injection")
+Rel_U(reportingService, reportRepositoryInterface, "Реализация интерфейса", "Dependency Injection")
+
+Rel(userRepository, userEntity, "Работа с данными о пользователях", "SQL")
+Rel(financialRepository, financialEntity, "Работа с финансовыми операциями", "SQL")
+Rel(reportRepository, reportEntity, "Работа с отчетами", "SQL")
+
+Container(mobileApp, "Мобильное приложение", "React Native", "Мобильное приложение для iOS и Android")
+Container(webApp, "Веб-приложение", "React", "Веб-интерфейс для взаимодействия с системой через браузер")
+
+Rel(mobileApp, api_gateway, "Маршрутизация запросов", "HTTPS")
+Rel(webApp, api_gateway, "Маршрутизация запросов", "HTTPS")
+
+Rel(api_gateway, authController, "Маршрутизация запросов", "HTTP")
+Rel(api_gateway, financialController, "Маршрутизация запросов", "HTTP")
+Rel(api_gateway, reportingController, "Маршрутизация запросов", "HTTP")
+Rel(api_gateway, integrationController, "Маршрутизация запросов", "HTTP")
+
+Rel_U(integrationService, bankSystem, "Интеграция с банковскими системами", "REST API")
+Rel_U(integrationService, financeApp, "Импорт данных из финансовых приложений", "REST API")
+Rel_U(reportingService, emailService, "Отправка уведомлений и отчетов", "REST API")
+
+Rel_U(integrationService, rabbitmq, "Публикация событий", "AMQP")
+
+Rel_U(clientA, userEntity, "Использует UserEntity", "HTTP")
+Rel_U(clientB, financialEntity, "Использует FinancialEntity", "HTTP")
+Rel_U(clientC, reportEntity, "Использует ReportEntity", "HTTP")
 
 @enduml

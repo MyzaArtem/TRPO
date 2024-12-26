@@ -1,1 +1,1 @@
-[Link to Miro board](https://miro.com/app/board/uXjVKA3Aczs=/?share_link_id=2929906993)
+[Link to Figma board](https://www.figma.com/design/8YqNngm1mOs9vKU7V508tE/Clothes-Shop2023-Field?node-id=1103-4909&t=6UzuvO6QD4fX2R6t-1)

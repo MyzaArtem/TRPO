@@ -16,7 +16,9 @@
                 "file": "Event Storming.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Event Storming"
             }
           },
           {
@@ -25,14 +27,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Event Storming.md",
+                "file": "ADR/2024-06.1 - Выбор архитектурной формы системы.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "2024-06.1 - Выбор архитектурной формы системы"
+            }
+          },
+          {
+            "id": "bdc4705153e9b834",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ADR/2024-06.10 - Выбор системы управления версиями.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2024-06.10 - Выбор системы управления версиями"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -52,7 +70,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
             }
           },
           {
@@ -67,7 +87,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
             }
           },
           {
@@ -75,7 +97,9 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
             }
           }
         ]
@@ -98,7 +122,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Event Storming.md",
+                "file": "ADR/2024-06.10 - Выбор системы управления версиями.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -106,7 +130,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки для 2024-06.10 - Выбор системы управления версиями"
             }
           },
           {
@@ -115,10 +141,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Event Storming.md",
+                "file": "ADR/2024-06.10 - Выбор системы управления версиями.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки из 2024-06.10 - Выбор системы управления версиями"
             }
           },
           {
@@ -129,7 +157,9 @@
               "state": {
                 "sortOrder": "frequency",
                 "useHierarchy": true
-              }
+              },
+              "icon": "lucide-tags",
+              "title": "Теги"
             }
           },
           {
@@ -138,8 +168,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Event Storming.md"
-              }
+                "file": "ADR/2024-06.10 - Выбор системы управления версиями.md"
+              },
+              "icon": "lucide-list",
+              "title": "Структура 2024-06.10 - Выбор системы управления версиями"
             }
           }
         ]
@@ -151,57 +183,60 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false
     }
   },
-  "active": "57e328b55a6dfc0c",
+  "active": "bdc4705153e9b834",
   "lastOpenFiles": [
-    "Story Map.md",
-    "Event Storming.md",
-    "README.md",
-    "out/2. Технический проект/infrastructure/Energy Consumption Accounting System Web App. Диаграмма infrastructure.png",
+    "2. Технический проект/state.puml",
+    "out/2. Технический проект/state/Диаграмма состояний.png",
+    "out/2. Технический проект/state",
+    "out/2. Технический проект/activity/Диаграмма состояний.png",
+    "out/2. Технический проект/maintanence/maintenance.png",
+    "out/2. Технический проект/infrastructure/C4 Infrastructure Diagram - Система семейного бюджета.png",
+    "out/2. Технический проект/3_component/C4. Компонент.png",
+    "ADR/2024-06.9 - Выбор подхода к управлению событиями и уведомлениями.md",
+    "ADR/2024-06.8 - Выбор способа обработки платежей.md",
+    "ADR/2024-06.7 - Выбор технологического процесса разработки.md",
+    "ADR/2024-06.6 - Выбор системы хранения данных.md",
+    "ADR/2024-06.4 - Выбор технологии программирования клиентского приложения.md",
+    "ADR/2024-06.3 - Выбор технологии программирования серверной части.md",
+    "ADR/2024-06.2 - Выбор системы непрерывной интеграции.md",
+    "ADR/2024-06.10 - Выбор системы управления версиями.md",
+    "out/2. Технический проект/infrastructure/Система учета библиотеки. Диаграмма infrastructure.png",
     "out/2. Технический проект/activity/Диаграмма активности.png",
+    "ADR/2024-06.1 - Выбор архитектурной формы системы.md",
+    "1. Исходные сведения/Архитектурные факторы.md",
+    "1. Исходные сведения/Введение.md",
+    "1. Исходные сведения/Словарь.md",
+    "out/2. Технический проект/2_container/C4. Контейнеры.png",
+    "out/2. Технический проект/1_context/C4. Контекст.png",
+    "Story Map.md",
+    "README.md",
+    "Event Storming.md",
+    "out/2. Технический проект/maintanence/истема учета библиотеки. Maintenance.png",
+    "3. Технические процессы/CI CD.md",
+    "3. Технические процессы/Управление задачами.md",
+    "3. Технические процессы/Соглашение о кодировании.md",
+    "3. Технические процессы/Документирование.md",
+    "3. Технические процессы/Ведение репозитория кода.md",
     "2. Технический проект/3_Компоненты.md",
     "2. Технический проект/2_Контейнеры.md",
     "2. Технический проект/1_Контекст.md",
-    "ADR/2024-06.8 - Выбор инструментов для мониторинга системы.md",
-    "ADR/2024-06.7 - Выбор технологического процесса разработки.md",
-    "ADR/2024-06.6 - Выбор инструментов автоматического тестирования.md",
-    "ADR/2024-06.4 - Выбор системы хранения данных.md",
-    "ADR/2024-06.3 - Выбор технологии программирования клиентского приложения.md",
-    "ADR/2024-06.2 - Выбор технологии программирования серверной части.md",
-    "ADR/2024-06.1 - Выбор архитектурной формы системы.md",
-    "1. Исходные сведения/Архитектурные факторы.md",
     "out/2. Технический проект/activity",
     "2. Технический проект/activity.puml",
-    "out/2. Технический проект/maintanence/Energy Consumption Accounting System Web App. maintenance.png",
     "out/2. Технический проект/maintanence",
-    "out/2. Технический проект/activitu/Диаграмма активности.png",
     "2. Технический проект/maintanence.puml",
     "out/2. Технический проект/infrastructure",
     "2. Технический проект/infrastructure.puml",
     "out/2. Технический проект/activitu",
     "2. Технический проект/activitu.puml",
-    "out/2. Технический проект/3_component/API. Диаграмма компонентов.png",
     "out/2. Технический проект/3_component",
-    "out/2. Технический проект/sample-component/comp.diag",
-    "out/2. Технический проект/2_container/Диаграмма контейнеров.png",
-    "out/2. Технический проект/1_context/Диаграмма контекста.png",
-    "out/2. Технический проект/1_context/Диаграмма контейнеров.png",
-    "2. Технический проект/Код.md",
-    "1. Исходные сведения/Словарь.md",
-    "1. Исходные сведения/Введение.md",
-    "out/2. Технический проект/sample-component/Recipe Service. Диаграмма компонентов.png",
-    "out/2. Технический проект/sample-container/Recipe Web App. Диаграмма контейнеров.png",
-    "3. Технические процессы/Ведение репозитория кода.md",
-    "3. Технические процессы/Соглашение о кодировании.md",
-    "3. Технические процессы/CI CD.md",
-    "3. Технические процессы/Управление задачами.md",
-    "3. Технические процессы/Документирование.md"
+    "2. Технический проект/Код.md"
   ]
 }
