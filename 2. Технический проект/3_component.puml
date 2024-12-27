@@ -13,38 +13,25 @@ System_Boundary(BudgetSystem_Boundary, "Система семейного бюд
     Container(api_gateway, "API шлюз", "Nginx", "Управление маршрутизацией запросов к различным сервисам")
 
     ' Контроллеры
-    Container_Boundary(controllers, "Контроллеры") {
-        Container(authController, "AuthController", "Node.js, Express", "Обработка запросов на авторизацию и аутентификацию пользователей", "HTTPS/JSON")
-        Container(financialController, "FinancialController", "Node.js, Express", "Обработка запросов на управление доходами, расходами и целями", "HTTPS/JSON")
-        Container(reportingController, "ReportingController", "Node.js, Express", "Обработка запросов на генерацию отчетов и анализа данных", "HTTPS/JSON")
-        Container(integrationController, "IntegrationController", "Node.js, Express", "Обработка запросов на интеграцию с внешними финансовыми сервисами", "HTTPS/JSON")
-    }
+    Container(authController, "AuthController", "Node.js, Express", "Обработка запросов на авторизацию и аутентификацию пользователей", "HTTPS/JSON")
+    Container(financialController, "FinancialController", "Node.js, Express", "Обработка запросов на управление доходами, расходами и целями", "HTTPS/JSON")
+    Container(reportingController, "ReportingController", "Node.js, Express", "Обработка запросов на генерацию отчетов и анализа данных", "HTTPS/JSON")
+    Container(integrationController, "IntegrationController", "Node.js, Express", "Обработка запросов на интеграцию с внешними финансовыми сервисами", "HTTPS/JSON")
 
     ' Сервисы
-    Container_Boundary(services, "Сервисы") {
-        Container(authService, "AuthService", "Node.js, Express", "Бизнес-логика для аутентификации пользователей", "HTTPS/JSON")
-        Container(financialService, "FinancialService", "Node.js, Express", "Обработка операций с доходами, расходами и сбережениями", "HTTPS/JSON")
-        Container(reportingService, "ReportingService", "Node.js, Express", "Генерация отчетов, графиков и анализа", "HTTPS/JSON")
-        Container(integrationService, "IntegrationService", "Node.js, Express", "Интеграция с внешними финансовыми сервисами", "HTTPS/JSON")
-    }
+    Container(authService, "AuthService", "Node.js, Express", "Бизнес-логика для аутентификации пользователей", "HTTPS/JSON")
+    Container(financialService, "FinancialService", "Node.js, Express", "Обработка операций с доходами, расходами и сбережениями", "HTTPS/JSON")
+    Container(reportingService, "ReportingService", "Node.js, Express", "Генерация отчетов, графиков и анализа", "HTTPS/JSON")
+    Container(integrationService, "IntegrationService", "Node.js, Express", "Интеграция с внешними финансовыми сервисами", "HTTPS/JSON")
 
     ' Репозитории
-    Container_Boundary(repositories, "Репозитории") {
-        Container(userRepositoryInterface, "IUserRepository", "Интерфейс", "Абстракция доступа к данным о пользователях")
-        Container(financialRepositoryInterface, "IFinancialRepository", "Интерфейс", "Абстракция доступа к данным о финансовых операциях")
-        Container(reportRepositoryInterface, "IReportRepository", "Интерфейс", "Абстракция доступа к данным о отчетах")
+    Container(userRepositoryInterface, "IUserRepository", "Интерфейс", "Абстракция доступа к данным о пользователях")
+    Container(financialRepositoryInterface, "IFinancialRepository", "Интерфейс", "Абстракция доступа к данным о финансовых операциях")
+    Container(reportRepositoryInterface, "IReportRepository", "Интерфейс", "Абстракция доступа к данным о отчетах")
 
-        Container(userRepository, "UserRepository", "Node.js, Express", "Сохранение и извлечение данных о пользователях", "HTTPS/JSON")
-        Container(financialRepository, "FinancialRepository", "Node.js, Express", "Сохранение и извлечение данных о финансовых операциях", "HTTPS/JSON")
-        Container(reportRepository, "ReportRepository", "Node.js, Express", "Сохранение и извлечение данных об отчетах", "HTTPS/JSON")
-    }
-
-    ' Сущности
-    Container_Boundary(entities, "Сущности") {
-        Container(userEntity, "UserEntity", "Класс данных", "Модель данных пользователя")
-        Container(financialEntity, "FinancialEntity", "Класс данных", "Модель данных финансовой операции")
-        Container(reportEntity, "ReportEntity", "Класс данных", "Модель данных отчета")
-    }
+    Container(userRepository, "UserRepository", "Node.js, Express", "Сохранение и извлечение данных о пользователях", "HTTPS/JSON")
+    Container(financialRepository, "FinancialRepository", "Node.js, Express", "Сохранение и извлечение данных о финансовых операциях", "HTTPS/JSON")
+    Container(reportRepository, "ReportRepository", "Node.js, Express", "Сохранение и извлечение данных об отчетах", "HTTPS/JSON")
 
     ' Дополнительные сервисы
     Container(emailClient, "Email клиент", "Java", "Клиент для отправки email уведомлений", "HTTPS/JSON")
@@ -71,19 +58,17 @@ Rel(integrationController, integrationService, "Вызов бизнес-логи
 Rel(authService, userRepositoryInterface, "Использует интерфейс для доступа к данным пользователей", "HTTPS/JSON")
 Rel(financialService, financialRepositoryInterface, "Использует интерфейс для доступа к финансовым данным", "HTTPS/JSON")
 Rel(reportingService, reportRepositoryInterface, "Использует интерфейс для доступа к данным отчетов", "HTTPS/JSON")
-Rel(integrationService, bankClient, "Взаимодействие с банковскими системами", "HTTPS/JSON")
-Rel(integrationService, financialClient, "Взаимодействие с внешними финансовыми системами", "HTTPS/JSON")
-Rel(integrationService, emailClient, "Отправка email уведомлений", "HTTPS/JSON")
+
+' Связи с внешними клиентами
+Rel(authService, emailClient, "Отправка email уведомлений", "HTTPS/JSON")
+Rel(financialService, bankClient, "Взаимодействие с банковскими системами", "HTTPS/JSON")
+Rel(financialService, financialClient, "Взаимодействие с внешними финансовыми системами", "HTTPS/JSON")
+Rel(reportingService, emailClient, "Отправка отчетов на email", "HTTPS/JSON")
 
 ' Реализации репозиториев
-Rel(userRepository, userRepositoryInterface, "Реализация интерфейса доступа к данным пользователей", "HTTPS/JSON")
-Rel(financialRepository, financialRepositoryInterface, "Реализация интерфейса доступа к финансовым данным", "HTTPS/JSON")
-Rel(reportRepository, reportRepositoryInterface, "Реализация интерфейса доступа к данным отчетов", "HTTPS/JSON")
-
-' Связи с сущностями
-Rel(userRepository, userEntity, "Использует модель данных пользователя")
-Rel(financialRepository, financialEntity, "Использует модель данных финансовой операции")
-Rel(reportRepository, reportEntity, "Использует модель данных отчета")
+Rel(userRepository, userRepositoryInterface, "Сохранение и извлечение данных о пользователях", "HTTPS/JSON")
+Rel(financialRepository, financialRepositoryInterface, "Сохранение и извлечение данных о финансовых операциях", "HTTPS/JSON")
+Rel(reportRepository, reportRepositoryInterface, "Сохранение и извлечение данных об отчетах", "HTTPS/JSON")
 
 ' Взаимодействие с внешними системами
 System_Ext(bankSystem, "Банковская система", "Обработка банковских операций")
