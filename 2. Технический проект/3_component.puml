@@ -1,25 +1,31 @@
 @startuml C4. Компонент
 
-title C4. Компоненты: Система семейного бюджета
+title Система семейного бюджета
 
 !include <C4/C4_Container>
 
-System_Boundary(budgetSystem_Boundary, "API Сервиса семейного бюджета") {
+System_Boundary(BudgetSystem_Boundary, "Система семейного бюджета") {
+    ' Клиенты
+    Container(budgetApp, "Мобильное приложение", "iOS/Android", "Интерфейс пользователя для управления бюджетом")
+    Container(budgetWebApp, "Веб-приложение", "React/Node.js", "Веб-интерфейс для управления бюджетом")
     
+    ' API шлюз
+    Container(api_gateway, "API шлюз", "Nginx", "Управление маршрутизацией запросов к различным сервисам")
+
     ' Контроллеры
     Container_Boundary(controllers, "Контроллеры") {
-        Container(authController, "AuthController", "Node.js, Express", "Обработка запросов на авторизацию и аутентификацию пользователей")
-        Container(financialController, "FinancialController", "Node.js, Express", "Обработка запросов на управление доходами, расходами и целями")
-        Container(reportingController, "ReportingController", "Node.js, Express", "Обработка запросов на генерацию отчетов и анализа данных")
-        Container(integrationController, "IntegrationController", "Node.js, Express", "Обработка запросов на интеграцию с внешними финансовыми сервисами")
+        Container(authController, "AuthController", "Node.js, Express", "Обработка запросов на авторизацию и аутентификацию пользователей", "HTTPS/JSON")
+        Container(financialController, "FinancialController", "Node.js, Express", "Обработка запросов на управление доходами, расходами и целями", "HTTPS/JSON")
+        Container(reportingController, "ReportingController", "Node.js, Express", "Обработка запросов на генерацию отчетов и анализа данных", "HTTPS/JSON")
+        Container(integrationController, "IntegrationController", "Node.js, Express", "Обработка запросов на интеграцию с внешними финансовыми сервисами", "HTTPS/JSON")
     }
 
     ' Сервисы
     Container_Boundary(services, "Сервисы") {
-        Container(authService, "AuthService", "Node.js, Express", "Бизнес-логика для аутентификации пользователей")
-        Container(financialService, "FinancialService", "Node.js, Express", "Обработка операций с доходами, расходами и сбережениями")
-        Container(reportingService, "ReportingService", "Node.js, Express", "Генерация отчетов, графиков и анализа")
-        Container(integrationService, "IntegrationService", "Node.js, Express", "Интеграция с внешними финансовыми сервисами")
+        Container(authService, "AuthService", "Node.js, Express", "Бизнес-логика для аутентификации пользователей", "HTTPS/JSON")
+        Container(financialService, "FinancialService", "Node.js, Express", "Обработка операций с доходами, расходами и сбережениями", "HTTPS/JSON")
+        Container(reportingService, "ReportingService", "Node.js, Express", "Генерация отчетов, графиков и анализа", "HTTPS/JSON")
+        Container(integrationService, "IntegrationService", "Node.js, Express", "Интеграция с внешними финансовыми сервисами", "HTTPS/JSON")
     }
 
     ' Репозитории
@@ -28,63 +34,69 @@ System_Boundary(budgetSystem_Boundary, "API Сервиса семейного б
         Container(financialRepositoryInterface, "IFinancialRepository", "Интерфейс", "Абстракция доступа к данным о финансовых операциях")
         Container(reportRepositoryInterface, "IReportRepository", "Интерфейс", "Абстракция доступа к данным о отчетах")
 
-        Container(userRepository, "UserRepository", "Node.js, Express", "Реализация репозитория пользователей")
-        Container(financialRepository, "FinancialRepository", "Node.js, Express", "Реализация репозитория финансовых данных")
-        Container(reportRepository, "ReportRepository", "Node.js, Express", "Реализация репозитория отчетов")
+        Container(userRepository, "UserRepository", "Node.js, Express", "Сохранение и извлечение данных о пользователях", "HTTPS/JSON")
+        Container(financialRepository, "FinancialRepository", "Node.js, Express", "Сохранение и извлечение данных о финансовых операциях", "HTTPS/JSON")
+        Container(reportRepository, "ReportRepository", "Node.js, Express", "Сохранение и извлечение данных об отчетах", "HTTPS/JSON")
     }
 
     ' Сущности
     Container_Boundary(entities, "Сущности") {
-        Container(userEntity, "UserEntity", "Класс данных", "Хранение данных о пользователях")
-        Container(financialEntity, "FinancialEntity", "Класс данных", "Хранение данных о финансовых операциях")
-        Container(reportEntity, "ReportEntity", "Класс данных", "Хранение данных об отчетах")
+        Container(userEntity, "UserEntity", "Класс данных", "Модель данных пользователя")
+        Container(financialEntity, "FinancialEntity", "Класс данных", "Модель данных финансовой операции")
+        Container(reportEntity, "ReportEntity", "Класс данных", "Модель данных отчета")
     }
 
-    ' API шлюз
-    Container(api_gateway, "API шлюз", "Nginx", "Управление маршрутизацией запросов к различным сервисам")
+    ' Дополнительные сервисы
+    Container(emailClient, "Email клиент", "Java", "Клиент для отправки email уведомлений", "HTTPS/JSON")
+    Container(bankClient, "Клиент банковских систем", "Java", "Клиент для взаимодействия с банковскими системами", "HTTPS/JSON")
+    Container(financialClient, "Финансовый клиент", "Java", "Клиент для взаимодействия с внешними финансовыми системами", "HTTPS/JSON")
+    Container(rabbitmq, "RabbitMQ", "Шина сообщений", "Обмен сообщениями между сервисами", "AMQP")
 }
 
-System_Ext(bankSystem, "Банковская система", "Интеграция с банковскими счетами и транзакциями для учета доходов и расходов")
-System_Ext(financeApp, "Финансовые приложения", "Импорт данных из других приложений")
-System_Ext(emailService, "Email Сервис", "Отправка уведомлений и отчетов пользователям")
-Container(rabbitmq, "RabbitMQ", "Шина сообщений", "Обмен событиями между компонентами системы")
+' Связи с API шлюзом
+Rel(budgetApp, api_gateway, "HTTP запросы", "HTTPS/JSON")
+Rel(budgetWebApp, api_gateway, "HTTP запросы", "HTTPS/JSON")
+Rel(api_gateway, authController, "Маршрутизация запросов на авторизацию", "HTTPS/JSON")
+Rel(api_gateway, financialController, "Маршрутизация запросов на управление финансами", "HTTPS/JSON")
+Rel(api_gateway, reportingController, "Маршрутизация запросов на генерацию отчетов", "HTTPS/JSON")
+Rel(api_gateway, integrationController, "Маршрутизация запросов на интеграцию", "HTTPS/JSON")
 
-Container(clientA, "Клиент A", "Использует UserEntity", "Связан с сущностями пользователей")
-Container(clientB, "Клиент B", "Использует FinancialEntity", "Связан с финансовыми сущностями")
-Container(clientC, "Клиент C", "Использует ReportEntity", "Связан с отчетными сущностями")
+' Связи с контроллерами и сервисами
+Rel(authController, authService, "Вызов бизнес-логики", "HTTPS/JSON")
+Rel(financialController, financialService, "Вызов бизнес-логики", "HTTPS/JSON")
+Rel(reportingController, reportingService, "Вызов бизнес-логики", "HTTPS/JSON")
+Rel(integrationController, integrationService, "Вызов бизнес-логики", "HTTPS/JSON")
 
-Rel(authController, authService, "Вызов бизнес-логики аутентификации", "HTTP")
-Rel(financialController, financialService, "Вызов бизнес-логики финансов", "HTTP")
-Rel(reportingController, reportingService, "Вызов бизнес-логики отчетности", "HTTP")
-Rel(integrationController, integrationService, "Вызов бизнес-логики интеграции", "HTTP")
+' Связи с сервисами и репозиториями
+Rel(authService, userRepositoryInterface, "Использует интерфейс для доступа к данным пользователей", "HTTPS/JSON")
+Rel(financialService, financialRepositoryInterface, "Использует интерфейс для доступа к финансовым данным", "HTTPS/JSON")
+Rel(reportingService, reportRepositoryInterface, "Использует интерфейс для доступа к данным отчетов", "HTTPS/JSON")
+Rel(integrationService, bankClient, "Взаимодействие с банковскими системами", "HTTPS/JSON")
+Rel(integrationService, financialClient, "Взаимодействие с внешними финансовыми системами", "HTTPS/JSON")
+Rel(integrationService, emailClient, "Отправка email уведомлений", "HTTPS/JSON")
 
-Rel_U(authService, userRepositoryInterface, "Реализация интерфейса", "Dependency Injection")
-Rel_U(financialService, financialRepositoryInterface, "Реализация интерфейса", "Dependency Injection")
-Rel_U(reportingService, reportRepositoryInterface, "Реализация интерфейса", "Dependency Injection")
+' Реализации репозиториев
+Rel(userRepository, userRepositoryInterface, "Реализация интерфейса доступа к данным пользователей", "HTTPS/JSON")
+Rel(financialRepository, financialRepositoryInterface, "Реализация интерфейса доступа к финансовым данным", "HTTPS/JSON")
+Rel(reportRepository, reportRepositoryInterface, "Реализация интерфейса доступа к данным отчетов", "HTTPS/JSON")
 
-Rel(userRepository, userEntity, "Работа с данными о пользователях", "SQL")
-Rel(financialRepository, financialEntity, "Работа с финансовыми операциями", "SQL")
-Rel(reportRepository, reportEntity, "Работа с отчетами", "SQL")
+' Связи с сущностями
+Rel(userRepository, userEntity, "Использует модель данных пользователя")
+Rel(financialRepository, financialEntity, "Использует модель данных финансовой операции")
+Rel(reportRepository, reportEntity, "Использует модель данных отчета")
 
-Container(mobileApp, "Мобильное приложение", "React Native", "Мобильное приложение для iOS и Android")
-Container(webApp, "Веб-приложение", "React", "Веб-интерфейс для взаимодействия с системой через браузер")
+' Взаимодействие с внешними системами
+System_Ext(bankSystem, "Банковская система", "Обработка банковских операций")
+Rel(bankClient, bankSystem, "Обращение к банковской системе", "HTTPS/JSON")
+System_Ext(financialApp, "Финансовое приложение", "Обработка финансовых операций")
+Rel(financialClient, financialApp, "Обращение к финансовому приложению", "HTTPS/JSON")
+System_Ext(emailSystem, "Email система", "Отправка email уведомлений")
+Rel(emailClient, emailSystem, "Отправка email уведомлений", "HTTPS/JSON")
 
-Rel(mobileApp, api_gateway, "Маршрутизация запросов", "HTTPS")
-Rel(webApp, api_gateway, "Маршрутизация запросов", "HTTPS")
-
-Rel(api_gateway, authController, "Маршрутизация запросов", "HTTP")
-Rel(api_gateway, financialController, "Маршрутизация запросов", "HTTP")
-Rel(api_gateway, reportingController, "Маршрутизация запросов", "HTTP")
-Rel(api_gateway, integrationController, "Маршрутизация запросов", "HTTP")
-
-Rel_U(integrationService, bankSystem, "Интеграция с банковскими системами", "REST API")
-Rel_U(integrationService, financeApp, "Импорт данных из финансовых приложений", "REST API")
-Rel_U(reportingService, emailService, "Отправка уведомлений и отчетов", "REST API")
-
-Rel_U(integrationService, rabbitmq, "Публикация событий", "AMQP")
-
-Rel_U(clientA, userEntity, "Использует UserEntity", "HTTP")
-Rel_U(clientB, financialEntity, "Использует FinancialEntity", "HTTP")
-Rel_U(clientC, reportEntity, "Использует ReportEntity", "HTTP")
+' RabbitMQ
+Rel(authService, rabbitmq, "Обмен сообщениями", "AMQP")
+Rel(financialService, rabbitmq, "Обмен сообщениями", "AMQP")
+Rel(reportingService, rabbitmq, "Обмен сообщениями", "AMQP")
+Rel(integrationService, rabbitmq, "Обмен сообщениями", "AMQP")
 
 @enduml
